@@ -1,0 +1,28 @@
+<h1>העלאת תמונה</h1>
+<h3>בחרו תמונה מתוך קובץ.התמונה תישמר בתיקייה בצד שרת, ותוצג בצד השמאלי של הדף</h3>
+<div class="row">
+  <div class="col">
+    <form [formGroup]="myForm" (ngSubmit)="submit()">
+
+      <div class="form-group">
+        <label for="file">תמונה</label>
+        <input formControlName="file"
+               id="file"
+               type="file"
+               class="form-control"
+               accept="image/*"
+               (change)="onFileChange($event)">
+        <div *ngIf="f.file.touched && f.file.invalid" class="alert alert-danger">
+          <div *ngIf="f.file.errors.required">חובה לבחור תמונה.</div>
+        </div>
+      </div>
+
+      <img [src]="imageSrc" *ngIf="imageSrc" style="height: 300px; width:300px">
+
+      <button class="btn btn-primary" type="submit">שמירה</button>
+    </form>
+  </div>
+  <div class="col">
+    <app-image-display></app-image-display>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<h3>רשימת התמונות שלי:</h3>
+<div class="row" style="height:60vh; border-width:2px;margin-top:30px;">
+  <div class="col col-lg-5">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let img of imageList; let i = index"
+          [attr.data-index]="i" (click)="createImgPath(i)" [class.active]="selectedIndex == i">
+        {{img.fileName}}
+      </li>
+    </ul>
+  </div>
+  <div class="col col-lg-7">
+    <img *ngIf="isLoaded" [src]="imageSrc" alt="user image" style="width:200px; height:200px;">
+  </div>
+</div>

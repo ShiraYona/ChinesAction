@@ -1,0 +1,106 @@
+<p-toolbar class="my-toolbar" styleClass="mb-4">
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+            (click)="openNew()"></button>
+        <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger"
+            (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+    </ng-template>
+    
+    <ng-template pTemplate="right">
+        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+    </ng-template>
+</p-toolbar>
+
+<div class="my-css">
+    <p-table #dt [value]="products" [rows]="10" [paginator]="true"
+        [globalFilterFields]="['name','donor','representative.name','status']" [(selection)]="selectedProducts"
+        [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                <h5 class="m-0">Manage Products</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Search..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="id">id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                <th pSortableColumn="donor">donor <p-sortIcon field="donor"></p-sortIcon></th>
+       
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                </td>
+                <td>{{product.id}}</td>
+                <td>{{product.name}}</td>
+                <td>{{product.price | currency:'USD'}}</td>
+                <td>{{product.donor}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        (click)="editProduct(product)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteProduct(product)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{products ? products.length : 0 }} products.
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="name">Name</label>
+            <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus />
+            <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small>
+        </div>
+       
+
+        <div class="p-field">
+            
+            <div class="p-formgrid p-grid">
+               
+            </div>
+        </div>
+
+        <div class="p-formgrid p-grid">
+            <div class="p-field p-col">
+                <label for="price">Price</label>
+                <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD"
+                    locale="en-US"></p-inputNumber>
+            </div>
+           
+            <div class="p-field">
+                <label for="donor">Donor</label>
+                <input type="text" pInputText id="donor" [(ngModel)]="product.donor" required autofocus />
+                <small class="p-error" *ngIf="submitted && !product.donor">Name is required.</small>
+            </div>
+          
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
